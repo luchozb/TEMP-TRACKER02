@@ -1,20 +1,26 @@
 const claveApi = '7b449c249ef9492f9a1234544252604';
-const idioma ='es';
-const inpCiudad= document.getElementById('input - ciudad');
+const idioma = 'es';
+const inpCiudad = document.getElementById('input-ciudad'); // ID corregido
 
-async function obtenerClima(){
-    const ciudad = inpCiudad.ariaValueMax;
+async function obtenerClima() {
+    const ciudad = inpCiudad.value.trim(); // Quitar espacios en blanco
 
-    if(ciudad){
+    if (!ciudad) { // Validación corregida
         alert('Por favor ingrese una ciudad');
-        return; 
+        return;
     }
+
     const apiClimaActual = `https://api.weatherapi.com/v1/current.json?q=${ciudad}&lang=${idioma}&key=${claveApi}`;
-    const response = await fetch(apiClimaActual);
 
-    mostarClima(data);
+    try {
+        const response = await fetch(apiClimaActual);
+        const data = await response.json();
+        mostrarClima(data);
+    } catch (error) {
+        console.error('Error al obtener el clima:', error);
+        alert('No se pudo obtener la información del clima.');
+    }
 }
-
 
 function mostrarClima(data) {
     document.querySelector('.clima-icono').src = data.current.condition.icon;
@@ -24,3 +30,10 @@ function mostrarClima(data) {
     document.querySelector('.humedad').innerHTML = data.current.humidity + '%';
     document.querySelector('.viento').innerHTML = data.current.wind_kph + ' km/h';
 }
+
+// Nuevo: permitir buscar con "Enter"
+inpCiudad.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        obtenerClima();
+    }
+});
