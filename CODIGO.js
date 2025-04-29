@@ -1,11 +1,11 @@
 const claveApi = '7b449c249ef9492f9a1234544252604';
 const idioma = 'es';
-const inpCiudad = document.getElementById('input-ciudad'); // ID corregido
+const inpCiudad = document.getElementById('input-ciudad');
 
 async function obtenerClima() {
-    const ciudad = inpCiudad.value.trim(); // Quitar espacios en blanco
+    const ciudad = inpCiudad.value.trim(); // Asegura que se lee correctamente el input
 
-    if (!ciudad) { // Validación corregida
+    if (!ciudad) {
         alert('Por favor ingrese una ciudad');
         return;
     }
@@ -15,10 +15,16 @@ async function obtenerClima() {
     try {
         const response = await fetch(apiClimaActual);
         const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+
         mostrarClima(data);
+
     } catch (error) {
         console.error('Error al obtener el clima:', error);
-        alert('No se pudo obtener la información del clima.');
+        alert('Ciudad no encontrada o error de red: ' + error.message);
     }
 }
 
@@ -31,9 +37,3 @@ function mostrarClima(data) {
     document.querySelector('.viento').innerHTML = data.current.wind_kph + ' km/h';
 }
 
-// Nuevo: permitir buscar con "Enter"
-inpCiudad.addEventListener('keyup', function(event) {
-    if (event.key === 'Enter') {
-        obtenerClima();
-    }
-});
