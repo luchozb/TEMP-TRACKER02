@@ -1,11 +1,11 @@
 const claveApi = '7b449c249ef9492f9a1234544252604';
 const idioma = 'es';
-const inpCiudad = document.getElementById('input-ciudad'); // ID corregido
+const inpCiudad = document.getElementById('input-ciudad');
 
 async function obtenerClima() {
-    const ciudad = inpCiudad.value.trim(); // Quitar espacios en blanco
+    const ciudad = inpCiudad.value.trim();
 
-    if (!ciudad) { // Validación corregida
+    if (!ciudad) {
         alert('Por favor ingrese una ciudad');
         return;
     }
@@ -31,7 +31,6 @@ function mostrarClima(data) {
     document.querySelector('.viento').innerHTML = data.current.wind_kph + ' km/h';
 }
 
-// Nuevo: permitir buscar con "Enter"
 inpCiudad.addEventListener('keyup', function(event) {
     if (event.key === 'Enter') {
         obtenerClima();
